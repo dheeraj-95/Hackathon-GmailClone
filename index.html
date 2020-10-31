@@ -24,8 +24,24 @@
         <button type="button" class="btn btn-success" onclick="authenticate().then(loadClient)">Authorize and load</button>
       </div>
 
-      <div class="col-md-12 text-center">
-        <button id="get-Mails" type="button" class="btn btn-success d-none" onclick="execute()">Get Mails List</button>
+      <div class="col-md-12 text-center d-none" id="my-col">
+        <button id="get-Mails" type="button" class="btn btn-success " onclick="execute()">Get Mails List</button>
+
+        <div id="my-mails-list">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#" onclick="addData(0,9)">1</a></li>
+              <li class="page-item"><a class="page-link" href="#" onclick="addData(10,19)">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
 
     

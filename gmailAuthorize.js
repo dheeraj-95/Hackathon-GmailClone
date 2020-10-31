@@ -1,9 +1,11 @@
 let clientId = "384837060954-tignegqj2b5jos63abs8crqma12pjkng.apps.googleusercontent.com";
 let apiKey = "AIzaSyD3SZ_hqSpRKuD0Io916-rt_k-OaZwOjZg";
 
-let getMails = document.getElementById('get-Mails');
+let getMails = document.getElementById('my-col');
 
 let scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.addons.current.message.action https://www.googleapis.com/auth/gmail.addons.current.message.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.addons.current.action.compose";
+
+let data = [];
 
 function authenticate() {
     return gapi.auth2.getAuthInstance()
@@ -23,6 +25,7 @@ function loadClient() {
 }
 
 async function execute() {
+    myList.classList.remove('d-none');
     try {
         let msgs = await gapi.client.gmail.users.messages.list({
             "userId": "gumudavellidheeraj@gmail.com",
@@ -36,12 +39,11 @@ async function execute() {
         let resultArray = [];
         resultArray = msgResponse.map(obj => { return obj["id"] })
 
-        let resultMails = [];
         for (let j = 0; j < resultArray.length; j++) {
             let res = await getMailObj(resultArray[j]);
-            resultMails.push(res);
+            data.push(res);
         }
-        console.log(resultMails);
+        console.log(data);
     } catch (e) {
         console.log('Error in Execute function', e);
     }
@@ -83,3 +85,52 @@ gapi.load("client:auth2", function () {
     gapi.auth2.init({ client_id: clientId });
 });
 
+var nav=document.createElement('nav');
+nav.setAttribute('class','navbar');
+
+var ul=document.createElement('ul');
+ul.setAttribute('class','pagination');
+
+var table=document.createElement('table');
+table.setAttribute('class','table');
+table.classList.add('table-responsive');
+
+var thead=document.createElement('thead');
+thead.id='h-res';
+var tbody=document.createElement('tbody');
+tbody.id='b-res';
+
+table.append(thead,tbody);
+
+function addData(start,end) {
+    document.getElementById('h-res').innerHTML='';
+    document.getElementById('b-res').innerHTML='';
+
+    var row1=document.createElement('tr');
+    var head1=document.createElement('th');
+    head1.innerHTML='From';
+    var head2=document.createElement('th');
+    head2.innerHTML='Subject';
+    var head3=document.createElement('th');
+    head3.innerHTML='Time';
+
+    thead.append(row1);
+    row1.append(head1,head2,head3);
+
+    for(let i=start;i<=end;i++) {
+        
+        let row=document.createElement('tr');
+        let col1=document.createElement('td');
+        col1.innerHTML=data[i].from;
+        let col2=document.createElement('td');
+        col2.innerHTML=data[i].subject;
+        let col3=document.createElement('td');
+        col3.innerHTML=data[i].time;
+       
+        tbody.append(row);
+        row.append(col1,col2,col3);
+    }
+}
+
+let myList = document.getElementById('my-mails-list');
+myList.append(table);

@@ -1,0 +1,97 @@
+<!-- <!doctype html>
+<html>
+  <head>
+    <title>Gmail API demo</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
+    <style>
+      iframe {
+        width: 100%;
+        border: 0;
+        min-height: 80%;
+        height: 600px;
+        display: flex;
+      }
+    </style>
+</head>
+
+<body>
+    <script src="https://apis.google.com/js/api.js"></script>
+<script>
+
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyD3SZ_hqSpRKuD0Io916-rt_k-OaZwOjZg");
+    return gapi.client.load("https://gmail.googleapis.com/$discovery/rest?version=v1")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute() {
+    return gapi.client.gmail.users.messages.list({
+        "userId": "gumudavellidheeraj@gmail.com",
+        "maxResults": 10
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+  gapi.load("client:auth2", function() {
+    gapi.auth2.init({client_id: "384837060954-tignegqj2b5jos63abs8crqma12pjkng.apps.googleusercontent.com"});
+  });
+</script>
+<button onclick="authenticate().then(loadClient)">authorize and load</button>
+<button onclick="execute()">execute</button>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Say hello using the People API</title>
+  <meta charset='utf-8' />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row mt-5 d-flex">
+      <div class="col-md-8 ">
+        <h1 class="diplay-2 text-center"> Hackathon on Gmail API </h1>
+      </div>
+
+    <div class="col-md-4 text-right">
+        <button id="authorize-button" type="button" class="btn btn-success" style="display: none;">Log In</button>
+        <button id="signout-button" type="button" class=" btn btn-warning" style="display: none;">Sign Out</button>
+    </div>
+
+    
+  </div>
+  </div>
+
+
+  <div id="content"></div>
+
+  <script defer type="text/javascript" src="./gmailAuthorize.js">
+
+  </script>
+  <script defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+</body>
+
+</html>

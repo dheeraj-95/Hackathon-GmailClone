@@ -1,11 +1,14 @@
 let clientId = "384837060954-tignegqj2b5jos63abs8crqma12pjkng.apps.googleusercontent.com";
 let apiKey = "AIzaSyD3SZ_hqSpRKuD0Io916-rt_k-OaZwOjZg";
 
-let getMails = document.getElementById('my-col');
+// let getMails = document.getElementById('my-col');
 
 let scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.addons.current.message.action https://www.googleapis.com/auth/gmail.addons.current.message.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.addons.current.action.compose";
 
 let data = [];
+
+let loader = document.querySelector('.loader');
+let myList = document.getElementById('my-mails-list');
 
 function authenticate() {
     return gapi.auth2.getAuthInstance()
@@ -18,19 +21,21 @@ function loadClient() {
     return gapi.client.load("https://gmail.googleapis.com/$discovery/rest?version=v1")
         .then(function () {
             console.log("GAPI client loaded for API");
-            getMails.classList.remove('d-none');
-            getMails.classList.add('d-inline');
+            // getMails.classList.remove('d-none');
+            // getMails.classList.add('d-inline');
+            execute();
         },
             function (err) { console.error("Error loading GAPI client for API", err); });
 }
 
 async function execute() {
-    myList.classList.remove('d-none');
+    loader.classList.remove('d-none');
+    
     try {
         let msgs = await gapi.client.gmail.users.messages.list({
             "userId": "gumudavellidheeraj@gmail.com",
             "includeSpamTrash": false,
-            "maxResults": 20,
+            "maxResults": 30,
             "q": "category:social"
         });
 
@@ -44,6 +49,49 @@ async function execute() {
             data.push(res);
         }
         console.log(data);
+        let uldata = document.querySelector('.pagination');
+        
+        if(data.length >= 10){
+            let count =9; let start = 0;
+            for(let i=0; i<3; i++,count+=9,start+=9){
+
+                let lidata = document.createElement('li');
+                lidata.classList.add('page-item');
+                let aTag = document.createElement('a');
+                aTag.setAttribute('href','#');
+                aTag.classList.add('page-link', `id-${i+1}`);
+                aTag.setAttribute('onclick',`addData(${i+start},${i+count})`);
+                aTag.innerText= `${i+1}`;
+                lidata.append(aTag);
+                uldata.append(lidata);
+            }
+            addData(0,9);
+            // let lidata = document.createElement('li');
+            // lidata.classList.add('page-item');
+            
+            // let aTag = document.createElement('a');
+            // aTag.setAttribute('href','#');
+            // aTag.classList.add('page-link');
+            // aTag.innerHTML = '&raquo;';
+            // let count1 = 9; let start1 = 0;
+            //     let i1 = 0; 
+            // aTag.addEventListener('click',function(){
+            //     if(count1 <= 29 && start1 <=20){
+            //         if(i1 <3 && i1>=0){
+            //             aTag.setAttribute('onclick', `addData(${i1+start1},${i1+count1})`);
+            //             i1+=1;
+            //             count1+=9;
+            //             start1+=10;
+
+            //         }
+            //     }
+            // });
+
+            // lidata.append(aTag);
+            // uldata.append(lidata);
+        }
+        loader.classList.add('d-none');
+        myList.classList.remove('d-none');
     } catch (e) {
         console.log('Error in Execute function', e);
     }
@@ -85,15 +133,9 @@ gapi.load("client:auth2", function () {
     gapi.auth2.init({ client_id: clientId });
 });
 
-var nav=document.createElement('nav');
-nav.setAttribute('class','navbar');
-
-var ul=document.createElement('ul');
-ul.setAttribute('class','pagination');
-
 var table=document.createElement('table');
 table.setAttribute('class','table');
-table.classList.add('table-responsive');
+// table.classList.add('table-responsive');
 
 var thead=document.createElement('thead');
 thead.id='h-res';
@@ -103,6 +145,8 @@ tbody.id='b-res';
 table.append(thead,tbody);
 
 function addData(start,end) {
+    // loader.classList.add('d-none');
+
     document.getElementById('h-res').innerHTML='';
     document.getElementById('b-res').innerHTML='';
 
@@ -127,10 +171,36 @@ function addData(start,end) {
         let col3=document.createElement('td');
         col3.innerHTML=data[i].time;
        
-        tbody.append(row);
         row.append(col1,col2,col3);
+        tbody.append(row);
     }
+    
 }
-
-let myList = document.getElementById('my-mails-list');
 myList.append(table);
+
+
+let search_input = document.querySelector("#search_input");
+
+search_input.addEventListener("keyup", function(e){
+
+    let filter, tr, td, i, txtValue;
+    filter = search_input.value.toUpperCase();
+    
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        console.log(td);
+        console.log(tr[i]);
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+            }
+        }       
+    }
+});
+
+    
+

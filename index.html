@@ -5,7 +5,7 @@
   <title>Say hello using the People API</title>
   <meta charset='utf-8' />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
@@ -14,30 +14,34 @@
   
   <div class="container">
     <div class="row mt-5 d-flex">
-      <div class="col-md-9 ">
-        <h1 class="display-4 text-center"> <strong> Hackathon on Gmail API </strong></h1>
+      <div class="row header pt-3">
+        <div class="col-md-9 title">
+          <h1 class="display-4 text-center"> <strong> Hackathon on Gmail API </strong></h1>
+        </div>
+  
+        <div class="col-md-3 mt-3 text-right">
+          <!-- <button id="authorize-button" type="button" class="btn btn-success" style="display: none;">Log In</button>
+          <button id="signout-button" type="button" class=" btn btn-warning" style="display: none;">Sign Out</button> -->
+          <button type="button" class="btn btn-success" onclick="authenticate().then(loadClient)">Authorize and load</button>
+        </div>
+  
+        <div class="col-md-12 mt-5 search_box text-center mb-4">
+          <input type="text" id="search_input"  placeholder="Fliter Inbox Using Subject">
+        </div>
       </div>
+      
 
-      <div class="col-md-3 mt-3 text-right">
-        <!-- <button id="authorize-button" type="button" class="btn btn-success" style="display: none;">Log In</button>
-        <button id="signout-button" type="button" class=" btn btn-warning" style="display: none;">Sign Out</button> -->
-        <button type="button" class="btn btn-success" onclick="authenticate().then(loadClient)">Authorize and load</button>
-      </div>
-
-      <div class="col-md-12 text-center d-none" id="my-col">
-        <button id="get-Mails" type="button" class="btn btn-success " onclick="execute()">Get Mails List</button>
-
-        <div id="my-mails-list">
+      <div class="col-md-12 text-center" id="my-col">
+        <!-- <button id="get-Mails" type="button" class="btn btn-success " onclick="execute()">Get Mails List</button> -->
+        <div class="loader mt-3 d-none"></div>
+        <div id="my-mails-list" class="d-none">
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#" onclick="addData(0,9)">1</a></li>
-              <li class="page-item"><a class="page-link" href="#" onclick="addData(10,19)">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+              <li class="page-item ">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
               </li>
             </ul>
           </nav>

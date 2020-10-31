@@ -1,3 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+  }
+
 body {
     background-color: lightgray;
+}
+
+.search_box {
+    margin: 0 auto;
+}
+
+.search_box input {
+    border: 0;
+    width: 100%;
+    outline: none;
+    padding: 10px;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+}
+
+::placeholder {
+    color: #e5edfa;
+}
+
+.header {
+    background: #29a5d8;
+}
+
+.loader {
+    border: 1rem solid white;
+    border-radius: 50%;
+    border-top: 1rem solid #56a5eb;
+    width: 7rem;
+    height: 7rem;
+    margin: 0 auto;
+    animation: spin 2s linear infinite;
+  }
+  
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
 }

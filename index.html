@@ -9,30 +9,72 @@
 </head>
 
 <body>
-  <script defer src="https://apis.google.com/js/api.js" ></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://apis.google.com/js/api.js"></script>
+  <script src="https://smtpjs.com/v3/smtp.js"> </script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script defer type="text/javascript" src="./gmailAuthorize.js"></script>
-  
+
   <div class="container">
     <div class="row mt-5 d-flex">
       <div class="col-md-12 header pt-3 px-0">
         <!-- <div class="col-md-9 title text-center"> -->
-          <h1 class="display-4 text-center"> <strong> Hackathon on Gmail API </strong></h1>
+        <h1 class="display-4 text-center"> <strong> Hackathon on Gmail API </strong></h1>
         <!-- </div> -->
-  
+
         <div class="col-md-12 mt-3 text-center">
-          <!-- <button id="authorize-button" type="button" class="btn btn-success" style="display: none;">Log In</button>
-          <button id="signout-button" type="button" class=" btn btn-warning" style="display: none;">Sign Out</button> -->
-          <button type="button" class="btn btn-success" onclick="authenticate().then(loadClient)">Authorize and load</button>
+          <button type="button" class="btn btn-success" onclick="authenticate().then(loadClient)">Authorize and
+            load</button>
         </div>
-  
+
+        <div class="col-md-12 mt-3 text-center my-label">
+          <div class="modal fade" id="compose-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form id="form">
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <input type="email" class="form-control" id="compose-to" placeholder="To" required />
+                    </div>
+
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="compose-subject" placeholder="Subject" required />
+                    </div>
+
+                    <div class="form-group">
+                      <textarea class="form-control" id="compose-message" placeholder="Message" rows="10"
+                        required></textarea>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" id="send-button" class="btn btn-primary">Send</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 mt-3 text-center">
+            <div id="labels" class="text-center d-none">
+              <a href="#compose-modal" data-toggle="modal" id="compose-button"
+                class="btn btn-primary pull-right hidden">Compose</a>
+            </div>
+          </div>
+        </div>
+
         <div class="col-md-12 mt-5 search_box text-center mb-4">
-          <input type="text" id="search_input"  placeholder="Fliter Inbox Using Subject">
+          <input type="text" id="search_input" placeholder="Fliter Inbox Using Subject">
         </div>
       </div>
-      
+
 
       <div class="col-md-12 text-center" id="my-col">
-        <!-- <button id="get-Mails" type="button" class="btn btn-success " onclick="execute()">Get Mails List</button> -->
         <div class="loader mt-3 d-none"></div>
         <div id="my-mails-list" class="d-none">
           <nav aria-label="Page navigation example">
@@ -48,11 +90,9 @@
         </div>
       </div>
 
-    
+
+    </div>
   </div>
-  </div>
-  
-  
 </body>
 
 </html>

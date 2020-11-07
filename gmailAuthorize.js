@@ -1,19 +1,27 @@
 let clientId = "384837060954-tignegqj2b5jos63abs8crqma12pjkng.apps.googleusercontent.com";
 let apiKey = "AIzaSyD3SZ_hqSpRKuD0Io916-rt_k-OaZwOjZg";
 
-// let getMails = document.getElementById('my-col');
-
-let scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.addons.current.message.action https://www.googleapis.com/auth/gmail.addons.current.message.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.addons.current.action.compose";
+let scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/gmail.addons.current.action.compose https://www.googleapis.com/auth/gmail.labels https://www.googleapis.com/auth/gmail.addons.current.message.action https://www.googleapis.com/auth/gmail.addons.current.message.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.addons.current.action.compose";
 
 let data = [];
 
 let loader = document.querySelector('.loader');
 let myList = document.getElementById('my-mails-list');
+let labels = document.getElementById('labels');
+
+let TOEmail = document.getElementById("compose-to");
+let EmailSubject = document.getElementById("compose-subject");
+let EmailMsg = document.getElementById("compose-message");
+
 
 function authenticate() {
     return gapi.auth2.getAuthInstance()
         .signIn({ scope: scopes })
-        .then(function (res) { console.log("Sign-in successful"); alert(`Hello ${res.tt.gV}! Logged In Successfully.`) },
+        .then(function (res) { 
+            console.log("Sign-in successful"); 
+            
+            alert(`Hello ${res.tt.gV}! Logged In Successfully.`); 
+        },
             function (err) { console.error("Error signing in", err); });
 }
 function loadClient() {
@@ -23,14 +31,14 @@ function loadClient() {
             console.log("GAPI client loaded for API");
             // getMails.classList.remove('d-none');
             // getMails.classList.add('d-inline');
-            execute();
+            executeMyFunc();
         },
             function (err) { console.error("Error loading GAPI client for API", err); });
 }
 
-async function execute() {
+async function executeMyFunc() {
     loader.classList.remove('d-none');
-    
+
     try {
         let msgs = await gapi.client.gmail.users.messages.list({
             "userId": "gumudavellidheeraj@gmail.com",
@@ -48,7 +56,7 @@ async function execute() {
             let res = await getMailObj(resultArray[j]);
             data.push(res);
         }
-        console.log(data);
+        // console.log(data);
         let uldata = document.querySelector('.pagination');
         
         if(data.length >= 10){
@@ -66,29 +74,7 @@ async function execute() {
                 uldata.append(lidata);
             }
             addData(0,9);
-            // let lidata = document.createElement('li');
-            // lidata.classList.add('page-item');
-            
-            // let aTag = document.createElement('a');
-            // aTag.setAttribute('href','#');
-            // aTag.classList.add('page-link');
-            // aTag.innerHTML = '&raquo;';
-            // let count1 = 9; let start1 = 0;
-            //     let i1 = 0; 
-            // aTag.addEventListener('click',function(){
-            //     if(count1 <= 29 && start1 <=20){
-            //         if(i1 <3 && i1>=0){
-            //             aTag.setAttribute('onclick', `addData(${i1+start1},${i1+count1})`);
-            //             i1+=1;
-            //             count1+=9;
-            //             start1+=10;
-
-            //         }
-            //     }
-            // });
-
-            // lidata.append(aTag);
-            // uldata.append(lidata);
+            labels.classList.remove('d-none');
         }
         loader.classList.add('d-none');
         myList.classList.remove('d-none');
@@ -129,6 +115,45 @@ async function getMailObj(msgId) {
         console.log('Error in getMailObj Function', e);
     }
 }
+
+function sendEmail() {
+    console.log('in send email func');
+    sendMessage(
+        {
+            'To': TOEmail.value,
+            'Subject': EmailSubject.value
+        },
+        EmailMsg.value,
+    );
+    
+    return false;
+}
+
+function sendMessage(headers_obj, message, callback) {
+    var email = '';
+
+    for (var header in headers_obj)
+        email += header += ": " + headers_obj[header] + "\r\n";
+        email += "\r\n" + message;
+
+    var sendRequest = gapi.client.gmail.users.messages.send({
+        "userId": "gumudavellidheeraj@gmail.com",
+        'resource': {
+            'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+        }
+    });
+    console.log(sendRequest);
+    return sendRequest.execute(callback);
+}
+
+
+let SendMail = document.getElementById("send-button")
+// console.log(SendMail);
+SendMail.addEventListener("click", function(){
+    sendEmail();
+    alert(`Email sent to ${TOEmail.value}`)
+})
+
 gapi.load("client:auth2", function () {
     gapi.auth2.init({ client_id: clientId });
 });
@@ -189,8 +214,8 @@ search_input.addEventListener("keyup", function(e){
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[1];
-        console.log(td);
-        console.log(tr[i]);
+        // console.log(td);
+        // console.log(tr[i]);
         if (td) {
             txtValue = td.textContent || td.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -201,6 +226,3 @@ search_input.addEventListener("keyup", function(e){
         }       
     }
 });
-
-    
-
